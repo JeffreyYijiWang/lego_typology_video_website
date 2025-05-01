@@ -1,59 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Lego Gifs</title>
-    <style>
-        body {
-            margin: 0;
-            background: black;
-            overflow: hidden;
-        }
-        #container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-        video {
-            position: absolute;
-            object-fit: cover;
-            pointer-events: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Lego Mosaic Map</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""
+  />
+  <style>
+    body, html { height:100%; margin:0; background:black; }
+    #map { width:100%; height:100%; }
+  </style>
 </head>
 <body>
-  <div id="container"></div>
+  <div id="map"></div>
 
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha512-o9+acezW+…(trimmed)…=="
+    crossorigin=""
+  ></script>
   <script>
-  // Load your grid JSON
-  fetch('video_grid.json')
-    .then(res => res.json())
-    .then(data => {
-      const container = document.getElementById('container');
-      const { positions, grid_size: { nx, ny } } = data;
-      const W = window.innerWidth, H = window.innerHeight;
-      const cellW = W / nx, cellH = H / ny;
+  // 1) Initialize a simple CRS map whose bounds match your grid size
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -1,
+    zoomSnap: 0.5,
+    attributionControl: false
+  });
 
-      const baseURL = 'https://jeffreyyijiwang.github.io/lego_typology_video_website/video/';
+  // 2) Load your grid JSON
+  fetch('grid_position.json')
+    .then(r => r.json())
+    .then(grid => {
+      const { nx, ny } = grid.grid_size;
+      const positions = grid.positions;
+      const baseURL = 'https://jeffreyyijiwang.github.io/lego_typology_video_website/mapImages/';
 
-      Object.entries(positions).forEach(([filename, { col, row }]) => {
-        const video = document.createElement('video');
-        video.src        = baseURL + filename;
-        video.autoplay   = true;
-        video.loop       = true;
-        video.muted      = true;
-        video.playsInline= true;
+      // 3) Define the map’s total bounds so [0,0] is bottom-left, [ny,nx] top-right
+      const bounds = [[0,0], [ny, nx]];
+      map.setMaxBounds(bounds);
+      map.fitBounds(bounds);
 
-        // convert 1-based row/col into 0-based pixel offsets
-        video.style.left   = `${(col - 1) * cellW}px`;
-        video.style.top    = `${(row - 1) * cellH}px`;
-        video.style.width  = `${cellW}px`;
-        video.style.height = `${cellH}px`;
+      // 4) For each image, overlay it in the correct cell
+      Object.entries(positions).forEach(([filename, {col, row}]) => {
+        // col,row are 1-based. Convert to 0-based grid:
+        const c0 = col - 1, r0 = row - 1;
 
-        container.appendChild(video);
+        // Leaflet’s y‐axis grows **up**, so row=0 at bottom.
+        // Our JSON row=1 at top? If your row=1 is top, invert:
+        const y0 = ny - row;
+        const y1 = ny - r0;
+
+        // bounds = [[southWestY, southWestX], [northEastY, northEastX]]
+        const imgBounds = [
+          [y0, c0],
+          [y1, c0 + 1]
+        ];
+
+        L.imageOverlay(baseURL + filename, imgBounds).addTo(map);
       });
     })
-    .catch(err => console.error('Error loading grid:', err));
+    .catch(console.error);
   </script>
 </body>
 </html>
