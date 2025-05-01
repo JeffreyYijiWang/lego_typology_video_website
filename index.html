@@ -114,13 +114,27 @@
     const grid = document.getElementById("grid");
     const fullscreen = document.getElementById("fullscreen");
     const fullscreenImg = document.getElementById("fullscreenImg");
-    const total = 228;
+    const total = 1000;
 
     for (let i = 1; i <= total; i++) {
       const img = document.createElement('img');
-      img.src = `mapImages/Blue_Batch_0${i}.jpg`;
-      img.alt = `Lock ${i}`;
+      img.src = `mapImages/${i}.jpg`;
+      img.alt = `lego ${i}`;
 
+      
+      let isMouseDown = false;
+
+
+      img.addEventListener('mousedown', () => {
+        isMouseDown = true;
+        fullscreenImg.src = `mapImages/${i}.jpg`;
+        fullscreen.style.display = 'flex';
+      });
+
+      window.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        fullscreen.style.display = 'none';
+      });
 
       grid.appendChild(img);
     }
