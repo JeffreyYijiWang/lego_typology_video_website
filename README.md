@@ -48,5 +48,14 @@
 <img src="images/Orange_Batch_004_final_mosaic.png" alt="Batch 1 preview"
      style="border:1px solid #444; border-radius:8px; width:3000px;" />
 
+<img src="images/Violet_Batch_001_final_mosaic.png" alt="Batch 1 preview"
+     style="border:1px solid #444; border-radius:8px; width:3000px;" />
+<img src="images/Violet_Batch_002_final_mosaic.png" alt="Batch 1 preview"
+     style="border:1px solid #444; border-radius:8px; width:3000px;" />
+<img src="images/Violet_Batch_003_final_mosaic.png" alt="Batch 1 preview"
+     style="border:1px solid #444; border-radius:8px; width:3000px;" />
 <img src="images/Violet_Batch_004_final_mosaic.png" alt="Batch 1 preview"
+     style="border:1px solid #444; border-radius:8px; width:3000px;" />
+
+<img src="images/Violet_Batch_005_final_mosaic.png" alt="Batch 1 preview"
      style="border:1px solid #444; border-radius:8px; width:3000px;" />
