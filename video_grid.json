@@ -1,0 +1,96 @@
+{
+  "grid_size": {
+    "nx": 5,
+    "ny": 5
+  },
+  "positions": {
+    "Blue_Batch_001.mp4": {
+      "col": 1,
+      "row": 1
+    },
+    "Blue_Batch_002.mp4": {
+      "col": 2,
+      "row": 1
+    },
+    "Blue_Batch_003.mp4": {
+      "col": 3,
+      "row": 1
+    },
+    "Blue_Batch_004.mp4": {
+      "col": 4,
+      "row": 1
+    },
+    "Blue_Batch_005.mp4": {
+      "col": 5,
+      "row": 1
+    },
+    "Blue_Batch_006.mp4": {
+      "col": 1,
+      "row": 2
+    },
+    "Blue_Batch_007.mp4": {
+      "col": 2,
+      "row": 2
+    },
+    "Blue_Batch_008.mp4": {
+      "col": 3,
+      "row": 2
+    },
+    "Blue_Batch_009.mp4": {
+      "col": 4,
+      "row": 2
+    },
+    "Blue_Batch_010.mp4": {
+      "col": 5,
+      "row": 2
+    },
+    "Green_Batch_001.mp4": {
+      "col": 1,
+      "row": 3
+    },
+    "Green_Batch_002.mp4": {
+      "col": 2,
+      "row": 3
+    },
+    "Green_Batch_003.mp4": {
+      "col": 3,
+      "row": 3
+    },
+    "Orange_Batch_001.mp4": {
+      "col": 4,
+      "row": 3
+    },
+    "Orange_Batch_002.mp4": {
+      "col": 5,
+      "row": 3
+    },
+    "Orange_Batch_003.mp4": {
+      "col": 1,
+      "row": 4
+    },
+    "Orange_Batch_004.mp4": {
+      "col": 2,
+      "row": 4
+    },
+    "Violet_Batch_001.mp4": {
+      "col": 3,
+      "row": 4
+    },
+    "Violet_Batch_002.mp4": {
+      "col": 4,
+      "row": 4
+    },
+    "Violet_Batch_003.mp4": {
+      "col": 5,
+      "row": 4
+    },
+    "Violet_Batch_004.mp4": {
+      "col": 1,
+      "row": 5
+    },
+    "Violet_Batch_005.mp4": {
+      "col": 2,
+      "row": 5
+    }
+  }
+}

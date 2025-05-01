@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moving Carpet Grid</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+        }
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        video {
+            position: absolute;
+            width: 64px; /* Adjust size here if needed */
+            height: 64px;
+            object-fit: cover;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+
+<script>
+// Load the first-frame JSON
+fetch('video_grid.json')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('container');
+        const positions = data.positions;
+        const gridSize = data.grid_size;
+        const containerWidth = window.innerWidth;
+        const containerHeight = window.innerHeight;
+        
+        // Size of each grid cell
+        const cellWidth = containerWidth / gridSize.nx;
+        const cellHeight = containerHeight / gridSize.ny;
+
+        for (const [filename, pos] of Object.entries(positions)) {
+     
+            const baseName = filename.replace('_firstframe.jpg', '.mp4');
+            const video = document.createElement('video');
+            video.src = `video/${baseName}`; 
+            video.autoplay = true;
+            video.loop = true;
+            video.muted = true;
+            video.playsInline = true;
+
+            video.style.left = (pos.col * cellWidth) + 'px';
+            video.style.top = (pos.row * cellHeight) + 'px';
+            video.style.width = `${cellWidth}px`;
+            video.style.height = `${cellHeight}px`;
+
+            container.appendChild(video);
+        }
+    })
+    .catch(error => {
+        console.error('Error loading positions JSON:', error);
+    });
+</script>
+</body>
+</html>
