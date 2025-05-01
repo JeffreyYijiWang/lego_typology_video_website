@@ -6,8 +6,6 @@
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-    crossorigin=""
   />
   <style>
     body, html { height:100%; margin:0; background:black; }
@@ -17,53 +15,66 @@
 <body>
   <div id="map"></div>
 
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha512-o9+acezW+…(trimmed)…=="
-    crossorigin=""
-  ></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-  // 1) Initialize a simple CRS map whose bounds match your grid size
-  const map = L.map('map', {
-    crs: L.CRS.Simple,
-    minZoom: -1,
-    zoomSnap: 0.5,
-    attributionControl: false
-  });
+    // 1) Initialize map in pixel-space
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      attributionControl: false,
+      zoomSnap: 0.5,
+      minZoom: -5
+    });
 
-  // 2) Load your grid JSON
-  fetch('grid_position.json')
-    .then(r => r.json())
-    .then(grid => {
-      const { nx, ny } = grid.grid_size;
-      const positions = grid.positions;
-      const baseURL = 'https://jeffreyyijiwang.github.io/lego_typology_video_website/mapImages/';
+    // 2) Load grid JSON
+    fetch('grid_position.json')
+      .then(r => r.json())
+      .then(grid => {
+        const { nx, ny } = grid.grid_size;
+        const positions = grid.positions;
+        const baseURL = 'https://jeffreyyijiwang.github.io/lego_typology_video_website/mapImages/';
+        const cellSize = 500;  // each tile is 500×500 px
 
-      // 3) Define the map’s total bounds so [0,0] is bottom-left, [ny,nx] top-right
-      const bounds = [[0,0], [ny, nx]];
-      map.setMaxBounds(bounds);
-      map.fitBounds(bounds);
+        // 3) Define full map bounds in pixels: width = nx*cellSize, height = ny*cellSize
+        const fullBounds = [[0,0], [ny * cellSize, nx * cellSize]];
+        map.setMaxBounds(fullBounds);
+        map.fitBounds(fullBounds);
 
-      // 4) For each image, overlay it in the correct cell
-      Object.entries(positions).forEach(([filename, {col, row}]) => {
-        // col,row are 1-based. Convert to 0-based grid:
-        const c0 = col - 1, r0 = row - 1;
+        // 4) Precompute each overlay’s pixel bounds
+        const cells = Object.entries(positions).map(([fname, {col, row}]) => {
+          const c0 = col - 1;
+          // if row=1 is top row, invert Y here:
+          const y0 = (ny - row) * cellSize;
+          return {
+            key: fname,
+            url: baseURL + fname,
+            bounds: [
+              [y0,        c0 * cellSize],             // southWest (y, x)
+              [y0 + cellSize, (c0 + 1) * cellSize]    // northEast
+            ]
+          };
+        });
 
-        // Leaflet’s y‐axis grows **up**, so row=0 at bottom.
-        // Our JSON row=1 at top? If your row=1 is top, invert:
-        const y0 = ny - row;
-        const y1 = ny - r0;
+        const active = {};
 
-        // bounds = [[southWestY, southWestX], [northEastY, northEastX]]
-        const imgBounds = [
-          [y0, c0],
-          [y1, c0 + 1]
-        ];
+        function update() {
+          const view = map.getBounds();
+          cells.forEach(cell => {
+            const b = L.latLngBounds(cell.bounds);
+            const inView = view.intersects(b);
+            if (inView && !active[cell.key]) {
+              active[cell.key] = L.imageOverlay(cell.url, cell.bounds).addTo(map);
+            }
+            if (!inView && active[cell.key]) {
+              map.removeLayer(active[cell.key]);
+              delete active[cell.key];
+            }
+          });
+        }
 
-        L.imageOverlay(baseURL + filename, imgBounds).addTo(map);
-      });
-    })
-    .catch(console.error);
+        map.on('moveend zoomend', update);
+        update();
+      })
+      .catch(console.error);
   </script>
 </body>
 </html>
