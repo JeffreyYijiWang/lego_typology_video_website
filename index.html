@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Moving Carpet Grid</title>
+    <title>Lego Gifs</title>
     <style>
         body {
             margin: 0;
@@ -16,52 +16,44 @@
         }
         video {
             position: absolute;
-            width: 64px; /* Adjust size here if needed */
-            height: 64px;
             object-fit: cover;
             pointer-events: none;
         }
     </style>
 </head>
 <body>
-<div id="container"></div>
+  <div id="container"></div>
 
-<script>
-// Load the first-frame JSON
-fetch('video_grid.json')
-    .then(response => response.json())
+  <script>
+  // Load your grid JSON
+  fetch('video_grid.json')
+    .then(res => res.json())
     .then(data => {
-        const container = document.getElementById('container');
-        const positions = data.positions;
-        const gridSize = data.grid_size;
-        const containerWidth = window.innerWidth;
-        const containerHeight = window.innerHeight;
-        
-        // Size of each grid cell
-        const cellWidth = containerWidth / gridSize.nx;
-        const cellHeight = containerHeight / gridSize.ny;
+      const container = document.getElementById('container');
+      const { positions, grid_size: { nx, ny } } = data;
+      const W = window.innerWidth, H = window.innerHeight;
+      const cellW = W / nx, cellH = H / ny;
 
-        for (const [filename, pos] of Object.entries(positions)) {
-     
-            const baseName = filename.replace('_firstframe.jpg', '.mp4');
-            const video = document.createElement('video');
-            video.src = `video/${baseName}`; 
-            video.autoplay = true;
-            video.loop = true;
-            video.muted = true;
-            video.playsInline = true;
+      const baseURL = 'https://jeffreyyijiwang.github.io/lego_typology_video_website/video/';
 
-            video.style.left = (pos.col * cellWidth) + 'px';
-            video.style.top = (pos.row * cellHeight) + 'px';
-            video.style.width = `${cellWidth}px`;
-            video.style.height = `${cellHeight}px`;
+      Object.entries(positions).forEach(([filename, { col, row }]) => {
+        const video = document.createElement('video');
+        video.src        = baseURL + filename;
+        video.autoplay   = true;
+        video.loop       = true;
+        video.muted      = true;
+        video.playsInline= true;
 
-            container.appendChild(video);
-        }
+        // convert 1-based row/col into 0-based pixel offsets
+        video.style.left   = `${(col - 1) * cellW}px`;
+        video.style.top    = `${(row - 1) * cellH}px`;
+        video.style.width  = `${cellW}px`;
+        video.style.height = `${cellH}px`;
+
+        container.appendChild(video);
+      });
     })
-    .catch(error => {
-        console.error('Error loading positions JSON:', error);
-    });
-</script>
+    .catch(err => console.error('Error loading grid:', err));
+  </script>
 </body>
 </html>
