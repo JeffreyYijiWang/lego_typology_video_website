@@ -1,44 +1,4 @@
 # lego_typology_video_website
 
-<video width="480" controls>
-  <source src="./video/Blue_Batch_001.mp4" type="video/mp4">
-  Your browser doesn’t support the video tag.
-</video>
-
-<p align="center">
-  <video width="480" controls>
-    <source src="./video/Blue_Batch_002.mp4" type="video/mp4">
-    Your browser doesn’t support the video tag.
-  </video>
-</p>
-
-
-<p align="center">
-  <video width="480" controls>
-    <source src="./video/Blue_Batch_003.mp4" type="video/mp4">
-    Your browser doesn’t support the video tag.
-  </video>
-</p>
-
-
-<p align="center">
-  <video width="480" controls>
-    <source src="./video/Blue_Batch_004.mp4" type="video/mp4">
-    Your browser doesn’t support the video tag.
-  </video>
-</p>
-
-<p align="center">
-  <video width="480" controls>
-    <source src="./video/Blue_Batch_005.mp4" type="video/mp4">
-    Your browser doesn’t support the video tag.
-  </video>
-</p>
-
-
-<p align="center">
-  <video width="480" controls>
-    <source src="./video/Blue_Batch_006.mp4" type="video/mp4">
-    Your browser doesn’t support the video tag.
-  </video>
-</p>
+<img src="final_image/Blue_Batch_001_final_mosaic.png" alt="Batch 1 preview"
+     style="border:1px solid #444; border-radius:8px; width:300px;" />
