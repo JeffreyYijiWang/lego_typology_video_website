@@ -114,11 +114,11 @@
     const grid = document.getElementById("grid");
     const fullscreen = document.getElementById("fullscreen");
     const fullscreenImg = document.getElementById("fullscreenImg");
-    const total = 1000;
+    const total = 1;
 
     for (let i = 1; i <= total; i++) {
       const img = document.createElement('img');
-      img.src = `mapImages/${i}.jpg`;
+      img.src = `mapImages/${i}.png`;
       img.alt = `lego ${i}`;
 
       
@@ -127,7 +127,7 @@
 
       img.addEventListener('mousedown', () => {
         isMouseDown = true;
-        fullscreenImg.src = `mapImages/${i}.jpg`;
+        fullscreenImg.src = `mapImages/${i}.png`;
         fullscreen.style.display = 'flex';
       });
 
